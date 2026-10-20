@@ -1,0 +1,10 @@
+import React, { memo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { theme as t } from '@/constants/theme';
+import { Project, isRtl } from '@/services/knowledge';
+interface ProjectCardProps { project: Project; count: number; onPress: () => void }
+export const ProjectCard = memo(function ProjectCard({ project, count, onPress }: ProjectCardProps) {
+  return <Pressable accessibilityRole="button" accessibilityLabel={`Open project ${project.title}`} onPress={onPress} style={({ pressed }) => [styles.card, { opacity: pressed ? 0.75 : 1 }]}><View style={styles.row}><Ionicons name="folder-open-outline" size={24} color={t.colors.violet} /><Text style={styles.status}>{project.status.toUpperCase()}</Text></View><Text style={[styles.title, { textAlign: isRtl(project.title) ? 'right' : 'left', writingDirection: isRtl(project.title) ? 'rtl' : 'ltr' }]}>{project.title}</Text><Text style={styles.count}>{count} linked knowledge {count === 1 ? 'item' : 'items'}</Text><View style={styles.action}><Ionicons name="arrow-forward-outline" size={16} color={t.colors.primary} /><Text style={[styles.actionText, { textAlign: isRtl(project.next_action) ? 'right' : 'left' }]} numberOfLines={2}>{project.next_action || 'Define your next action'}</Text></View></Pressable>;
+});
+const styles = StyleSheet.create({ card: { backgroundColor: t.colors.surface, borderWidth: 1, borderColor: t.colors.border, borderRadius: t.radius.md, padding: t.space.lg, gap: t.space.md }, row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }, status: { color: t.colors.violet, fontSize: t.font.small, letterSpacing: 1 }, title: { color: t.colors.text, fontSize: t.font.section, fontWeight: '600' }, count: { color: t.colors.muted, fontSize: t.font.label }, action: { flexDirection: 'row', gap: t.space.sm, borderTopWidth: 1, borderTopColor: t.colors.border, paddingTop: t.space.md }, actionText: { flex: 1, color: t.colors.primary, fontSize: t.font.label, lineHeight: 22 } });
